@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OCR Number Plate Extractor</title>
+    <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+body{
+    display:block;
+    justify-items: center;
+    background-color: #0b0d10;
+    font-family: 'Poppins', sans-serif;
+}
+
+h1{
+    color: white;
+    font-family: "Bebas Neue";
+    font-size: 80px;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 100px;
+    font-weight: 700;
+    background: linear-gradient(to right,#fc72ff,#8f68ff,#487bff,#8f68ff,#fc72ff);
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: animate-gradient 2.5s linear infinite;
+}  
+
+@keyframes animate-gradient{
+    to{
+        background-position: 200%;
+    }
+}
+
+h2{
+    font-size: xx-large;
+    margin: 10px;
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.826);
+}
+
+
+.container1{
+    display:grid;
+    text-align: center;
+    width: 540px;
+    border-radius: 20px;
+    position:relative;
+    margin: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+}
+
+.container2{
+    background-color: #161a20;
+    display:grid;
+    text-align: center;
+    width: 540px;
+    border-radius: 20px;
+    position:relative;
+    margin: 30px;
+    margin-top: 70px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    z-index: -2;
+}
+
+.buttons{
+    margin: 25px;
+    display:inline-flex;
+}
+
+.btn {
+    width: 205px;
+    height: 68px;
+    font-size: 20px;
+    padding: 1em 2em;
+    background-color: #161a20;
+    margin: 20px;
+    border-radius: 1000px;
+    color: rgb(248, 248, 251);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+.btn::after{
+    content: '';
+    position: absolute;
+    height: 114%;
+    width: 105%;
+    border-radius: 1000px;
+    background-image: linear-gradient(to bottom right,#008cff,#e100ff);
+    z-index: -1;
+}
+.btn:hover{
+    z-index: 0;
+    box-shadow: 40px 0 50px #e100ffa7, -40px 0 50px #008cff8f;
+}
+
+input[type="file"]{
+    display: none;
+}
+
+.upload {
+    width: 125px;
+    height: 25px;
+    font-size: 20px;
+    padding: 1em 2em;
+    background-color: #161a20;
+    margin: 20px;
+    border-radius: 1000px;
+    color: rgb(248, 248, 251);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+.upload::after{
+    content: '';
+    position: absolute;
+    height: 112%;
+    width: 104%;
+    border-radius: 1000px;
+    background-image: linear-gradient(to bottom right,#008cff,#e100ff);
+    z-index: -1;
+}
+.upload:hover{
+    z-index: 0;
+    box-shadow: 40px 0 50px #e100ffa7, -40px 0 50px #008cff8f;
+}
+
+h3{
+    font-size: x-large;
+    padding-bottom: 5px;
+    margin-top: 0%;
+    color: rgb(66, 66, 66);
+}
+
+#result{
+    padding-bottom: 20px;
+    color: white;
+    font-size: 30px;
+    font-weight: 300;
+}
+
+    </style>
+</head>
+<body>
+    <h1>
+        LICENCE PLATE READER
+    </h1>
+    <div class="container1">
+        <h2>Upload an Image</h2>
+        <div class="line"></div>
+        <form id="upload-form" enctype="multipart/form-data">
+               <div class="buttons">
+                   <input id="up" type="file" name="image" accept="image/*" required>
+                   <label for="up" class="upload">Upload File</label>
+                   <button class="btn" type="submit">Extract Text</button>
+               </div>
+        </form>
+    </div>
+    
+    <div class="container2">
+        <h3>Extracted Text:</h3>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            const res = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            document.getElementById('result').innerText = data.text.join(', ');
+        });
+    </script>
+</body>
+</html>
